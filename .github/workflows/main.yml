@@ -1,0 +1,26 @@
+name: Deploy to Somee
+
+on:
+  push:
+    branches:
+      - main  # Khi push lên nhánh main
+
+jobs:
+  deploy:
+    name: Deploy via FTP
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Upload files via FTP
+      uses: SamKirkland/FTP-Deploy-Action@4.2.0
+      with:
+        server: ${{ secrets.SOMEE_FTP_HOST }}  # Ví dụ: ftp.somee.com
+        username: ${{ secrets.SOMEE_FTP_USERNAME }}
+        password: ${{ secrets.SOMEE_FTP_PASSWORD }}
+        port: 21
+        local-dir: ./  # Thư mục chứa project trên GitHub
+        server-dir: /wwwroot/your-project/  # Thư mục trên Somee
+        git-ftp-args: --insecure
